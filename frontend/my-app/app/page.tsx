@@ -19,27 +19,62 @@ export default function Home() {
     };
     reader.readAsDataURL(file);
 
+    // --- FIX 1: Change "file" to "image" ---
     // Send the image to backend
     const formData = new FormData();
-    formData.append("file", file);
+    formData.append("image", file); // <-- This now matches your backend's 'request.files['image']'
 
     setLoading(true);
+    // Clear old results
+    setEquation(null);
+    setAnswer(null);
+    setSteps(null);
+    
     try {
-      const response = await fetch("http://localhost:5000/solve", {
+      // Make sure this URL is correct (it matches your backend)
+        const response = await fetch("http://127.0.0.1:5000/solve", {
         method: "POST",
         body: formData,
       });
+
+      if (!response.ok) {
+        // Handle server errors (like 400 or 500)
+        const errData = await response.json();
+        console.error("Server error:", errData.error);
+        // Don't use alert, use a better UI element in production
+        alert(`Failed to process equation: ${errData.error}`);
+        setLoading(false);
+        return;
+      }
+
       const data = await response.json();
 
-      // Example backend response:
-      // { equation: "3x + 5 = 20", answer: "x = 5", steps: ["Simplify...", "Subtract...", "Divide..."] }
+      // --- FIX 2: Map backend data to frontend state ---
+      //
+      // Your backend sends: { latex: "...", solution: "..." }
+      // Your frontend wants: equation, answer, steps
+      
+      // 1. 'latex' from backend maps to 'equation' state
+      setEquation(data.latex);
 
-      setEquation(data.equation);
-      setAnswer(data.answer);
-      setSteps(data.steps);
+      // 2. 'solution' from backend is a single string with newlines.
+      //    We will split it by newlines to create the 'steps' array.
+      const solutionSteps = data.solution.split('\n').filter(line => line.trim() !== '');
+      setSteps(solutionSteps);
+      
+      // 3. Your backend doesn't provide a separate "answer". 
+      //    The answer is just the last step of the solution.
+      //    We'll set the "Answer" bubble to the last line of the steps.
+      if (solutionSteps.length > 0) {
+        setAnswer(solutionSteps[solutionSteps.length - 1]);
+      } else {
+        setAnswer("See solution below");
+      }
+
     } catch (err) {
       console.error("Error:", err);
-      alert("Failed to process equation.");
+      // Don't use alert, use a better UI element in production
+      alert("Failed to connect to the server.");
     } finally {
       setLoading(false);
     }
@@ -94,11 +129,11 @@ export default function Home() {
         <>
           <div className="flex flex-col md:flex-row gap-6 mb-8 w-full max-w-3xl justify-center">
             <div className="flex-1 bg-white p-4 rounded-lg shadow-md text-center">
-              <h2 className="text-gray-500 text-sm font-medium mb-2">Equation</h2>
+              <h2 className="text-gray-500 text-sm font-medium mb-2">Equation (LaTeX)</h2>
               <p className="text-lg font-semibold">{equation}</p>
             </div>
             <div className="flex-1 bg-white p-4 rounded-lg shadow-md text-center">
-              <h2 className="text-gray-500 text-sm font-medium mb-2">Answer</h2>
+              <h2 className="text-gray-500 text-sm font-medium mb-2">Final Answer</h2>
               <p className="text-lg font-semibold text-green-600">{answer}</p>
             </div>
           </div>
@@ -110,7 +145,8 @@ export default function Home() {
             <div className="space-y-2">
               {steps.map((step, i) => (
                 <p key={i} className="text-gray-700">
-                  <strong>Step {i + 1}:</strong> {step}
+                  {/* We don't need to add "Step X:" because the AI solution likely has it */}
+                  {step}
                 </p>
               ))}
             </div>
