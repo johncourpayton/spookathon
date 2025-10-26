@@ -11,6 +11,7 @@ export default function Home() {
   const [loadingText, setLoadingText] = useState("It’s looking Spooky");
   const [showAnswer, setShowAnswer] = useState(false);
 
+  // Phrases 
   const spookyPhrases = [
     "It’s looking Spooky",
     "Summoning the Square Roots",
@@ -18,7 +19,7 @@ export default function Home() {
     "Integrating the Incantations",
   ];
 
-  // 🎃 Rotating spooky loading text
+  // Rotating spooky loading text
   useEffect(() => {
     if (loading) {
       let i = 0;
@@ -75,18 +76,47 @@ export default function Home() {
 
   return (
     <main className="min-h-screen flex flex-col items-center justify-start p-8 bg-gradient-to-b from-[#0f001a] via-[#1a0033] to-[#24004d] text-purple-100">
-      <h1 className="text-4xl font-bold mb-4 text-purple-200">Math Equation Solver</h1>
-      <p className="text-purple-400 mb-8">
-        Upload an image of your equation to get instant solutions
-      </p>
 
-      {/* Upload Section */}
+  {/* Header */}
+  <header className="w-full max-w-5xl mb-12">
+    <div className="text-center mb-6">
+      <h1 className="text-5xl font-bold text-purple-100 mb-3 drop-shadow-[0_0_15px_rgba(168,85,247,0.8)]">
+        Math Solver
+      </h1>
+      <p className="text-purple-300 text-lg">
+        Upload a photo of handwritten math for a step-by-step solution
+      </p>
+    </div>
+
+    {/* Subject Tabs, Add functionality later */}
+    <div className="flex flex-wrap justify-center gap-4 bg-[#1a0033]/50 p-3 rounded-xl shadow-[0_0_30px_4px_rgba(168,85,247,0.3)] border border-purple-700">
+      {[
+        "College Algebra",
+        "Calculus I",
+        "Calculus II",
+        "Calculus III",
+        "Linear Algebra",
+        "Physics",
+        "Statistics",
+      ].map((subject, index) => (
+        <div
+          key={index}
+          className="px-5 py-2 rounded-full font-medium transition-all duration-300 text-sm bg-transparent text-purple-300 hover:text-purple-100 hover:scale-105"
+        >
+          {subject}
+        </div>
+      ))}
+    </div>
+  </header>
+
+      {/* Upload Bubble */}
       <label
         htmlFor="upload"
         className={`relative w-96 h-64 rounded-2xl flex flex-col items-center justify-center cursor-pointer mb-10 border-2 border-dashed 
-          ${loading
-            ? "animate-glow border-purple-400 shadow-[0_0_30px_5px_rgba(168,85,247,0.6)]"
-            : "border-purple-600 hover:border-purple-400 shadow-[0_0_20px_3px_rgba(168,85,247,0.3)]"
+          ${
+            loading
+              ? "animate-glow border-purple-400 shadow-[0_0_30px_5px_rgba(168,85,247,0.6)]"
+              : "border-purple-600 hover:border-purple-400 shadow-[0_0_20px_3px_rgba(168,85,247,0.3)]"
           } bg-[#16002b] transition-all duration-300`}
       >
         {loading ? (
@@ -114,7 +144,7 @@ export default function Home() {
         <input type="file" id="upload" accept="image/*" onChange={handleImageUpload} className="hidden" />
       </label>
 
-      {/* Results */}
+      {/* Results Section */}
       {equation && answer && steps && !loading && (
         <>
           <div className="flex flex-col md:flex-row gap-6 mb-8 w-full max-w-3xl justify-center">
@@ -125,7 +155,7 @@ export default function Home() {
               </div>
             </div>
 
-            {/* Answer Bubble with Blur Reveal */}
+            {/* Answer Bubble with Blur -> Reveal */}
             <div
               onClick={() => setShowAnswer(true)}
               className="flex-1 bg-[#1e003a] p-4 rounded-xl shadow-[0_0_25px_3px_rgba(168,85,247,0.5)] text-center border border-purple-600 cursor-pointer group relative"
@@ -159,6 +189,7 @@ export default function Home() {
         </>
       )}
 
+      {/* Glow Animation */}
       <style jsx global>{`
         @keyframes glow {
           0% { box-shadow: 0 0 20px 3px rgba(168, 85, 247, 0.4); }
@@ -172,5 +203,4 @@ export default function Home() {
     </main>
   );
 }
-
 

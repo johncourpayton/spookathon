@@ -22,7 +22,7 @@ UPLOAD_FOLDER = 'uploads'
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
-# Initialize our AI models ONCE when the server starts
+# VEIFY MODELS RUNNING
 try:
     print("Loading Google AI Client...")
     ai_client = genai.Client()
@@ -37,15 +37,13 @@ except Exception as e:
     # If models can't load, the server can't do its job.
     exit()
 
-# --- 2. Define the API Endpoint ---
+#2. Define the API Endpoint
 
-# This creates a new URL at http://127.0.0.1:5000/solve
-# It only accepts POST requests (which is how files are sent)
 @app.route('/solve', methods=['POST'])
 def solve_problem():
     print("\nReceived a new request...")
     
-    # --- 3. Get the Uploaded Image ---
+    #3. Get the Uploaded Image
     
     # Check if the 'image' file is in the request
     if 'image' not in request.files:
@@ -61,7 +59,7 @@ def solve_problem():
 
     image_path = None
     try:
-        # --- 4. Process the Image ---
+        #4. Process the Image
         
         # Save the file temporarily
         filename = secure_filename(file.filename)
@@ -79,7 +77,7 @@ def solve_problem():
             
         print(f"Recognized LaTeX: {latex_formula}")
 
-        # --- 5. Call the AI API ---
+        #5. Call the AI API
         
         print("Sending to Google AI...")
         prompt_to_send = f"""
@@ -87,7 +85,7 @@ You are a precision mathematical solver. Your ONLY job is to provide a
 step-by-step solution for the given LaTeX problem.
 
 **CRITICAL RULES:**
-0. IF A MATH EQUATION IS NOT recognized, RETURN AN ERROR MESSAGE IN JSON FORMAT.
+0. IF A MATH EQUATION IS NOT recognized, RETURN AN ERROR MESSAGE.
 1. You MUST follow the output template *exactly*.
 2. **DO NOT explain the LaTeX code itself.** Never discuss what a command 
    like `\\underbrace` or `\\frac` means. Only solve the mathematical 
@@ -136,7 +134,7 @@ $$\\boxed{{[Final LaTeX answer]}}$$
         solution_text = response.text
         print("AI Solution generated.")
 
-        # --- 6. Send the Solution Back ---
+        #6. Send the Solution Back
         
         # Return a JSON object with the solution and the recognized formula
         return jsonify({
@@ -150,14 +148,14 @@ $$\\boxed{{[Final LaTeX answer]}}$$
         return jsonify({"error": f"An internal server error occurred: {e}"}), 500
         
     finally:
-        # --- 7. Clean Up ---
+        #7. Clean Up
         
         # Delete the temporary image file after we're done
         if image_path and os.path.exists(image_path):
             os.remove(image_path)
             print(f"Cleaned up temporary file: {image_path}")
 
-# --- 8. Run the Server ---
+#8. Run the Server
 
 # This line makes the script run continuously as a server
 if __name__ == '__main__':
