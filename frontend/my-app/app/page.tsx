@@ -101,6 +101,12 @@ export default function Home() {
       ].map((subject, index) => (
         <div
           key={index}
+          onClick={() => {
+            // Opens the Calculus handout when a Calculus tab is clicked
+            if (subject.includes("Calculus")) {
+              window.open("/CALCULUS HANDOUT.pdf", "_blank");
+            }
+          }}
           className="px-5 py-2 rounded-full font-medium transition-all duration-300 text-sm bg-transparent text-purple-300 hover:text-purple-100 hover:scale-105"
         >
           {subject}
@@ -203,4 +209,3 @@ export default function Home() {
     </main>
   );
 }
-

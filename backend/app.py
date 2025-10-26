@@ -80,36 +80,35 @@ def solve_problem():
         #5. Call the AI API
         
         print("Sending to Google AI...")
-        prompt_to_send = f"""
+        prompt_to_send = rf"""
 You are a precision mathematical solver. Your ONLY job is to provide a 
 step-by-step solution for the given LaTeX problem.
 
 **CRITICAL RULES:**
 0. IF A MATH EQUATION IS NOT recognized, RETURN AN ERROR MESSAGE.
 1. You MUST follow the output template *exactly*.
-2. **DO NOT explain the LaTeX code itself.** Never discuss what a command 
-   like `\\underbrace` or `\\frac` means. Only solve the mathematical 
-   problem it represents.
+2. **DO NOT explain the LaTeX code itself, its syntax, or its structure.** Never discuss what a command 
+   like `\underbrace` or `\frac` means, nor should you comment on the *style* or *validity* of the input LaTeX formula. **You must ASSUME the input LaTeX represents a mathematically standard problem.** Only solve the mathematical problem it represents.
 3. Do NOT add any conversational text.
 4. ALL mathematical calculations MUST be in display-style LaTeX (`$$...$$`).
 5. ALL reasoning text MUST be plain English.
 6. The final answer MUST be in the exact format: `$$\\boxed{{final_answer}}$$`
 
-**OUTPUT TEMPLATE:**
+**OUTPUT TEMPLATE:
 ---
 ## Step-by-Step Solution
 
-**Step 1: [Short Title for Step 1]**
-*Reasoning:* [Explain the goal or logic of this step in plain text.]
+Step 1: [Short Title for Step 1]
+*Reasoning:* [Explain the goal or mathematical identity/concept of this step in plain text. **This reasoning must focus on the math concept being applied, not on interpreting or validating the input LaTeX formula.**]
 *Calculation:*
 $$[LaTeX for the calculation of Step 1]$$
 
-**Step 2: [Short Title for Step 2]**
+Step 2: [Short Title for Step 2]
 *Reasoning:* [Explain the goal or logic of this step in plain text.]
 *Calculation:*
 $$[LaTeX for the calculation of Step 2]$$
 
-**Step 3: [Short Title for Step 3]**
+Step 3: [Short Title for Step 3]
 *Reasoning:* [Explain the goal or logic of this step in plain text.]
 *Calculation:*
 $$[LaTeX for the calculation of Step 3]$$
@@ -120,7 +119,7 @@ $$[LaTeX for the calculation of Step 3]$$
 ## Final Answer
 $$\\boxed{{[Final LaTeX answer]}}$$
 
-**PROBLEM TO SOLVE:**
+**PROBLEM TO SOLVE:
 {latex_formula}
 
 **IMPORTANT:** Your response must end with exactly: `$$\\boxed{{[answer]}}$$` where [answer] is the final solution.
