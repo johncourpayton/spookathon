@@ -1,5 +1,6 @@
 "use client";
 import React, { useState } from "react";
+import { KaTeXRenderer, LaTeXText } from "../components/KaTeXRenderer";
 
 export default function Home() {
   const [image, setImage] = useState<string | null>(null);
@@ -130,11 +131,15 @@ export default function Home() {
           <div className="flex flex-col md:flex-row gap-6 mb-8 w-full max-w-3xl justify-center">
             <div className="flex-1 bg-white p-4 rounded-lg shadow-md text-center">
               <h2 className="text-gray-500 text-sm font-medium mb-2">Equation (LaTeX)</h2>
-              <p className="text-lg font-semibold">{equation}</p>
+              <div className="text-lg font-semibold">
+                <KaTeXRenderer latex={equation || ""} displayMode={true} />
+              </div>
             </div>
             <div className="flex-1 bg-white p-4 rounded-lg shadow-md text-center">
               <h2 className="text-gray-500 text-sm font-medium mb-2">Final Answer</h2>
-              <p className="text-lg font-semibold text-green-600">{answer}</p>
+              <div className="text-lg font-semibold text-green-600">
+                <LaTeXText content={answer || ""} />
+              </div>
             </div>
           </div>
 
@@ -142,12 +147,11 @@ export default function Home() {
             <h2 className="text-lg font-medium text-green-700 mb-3">
               Step-by-Step Solution
             </h2>
-            <div className="space-y-2">
+            <div className="space-y-4">
               {steps.map((step, i) => (
-                <p key={i} className="text-gray-700">
-                  {/* We don't need to add "Step X:" because the AI solution likely has it */}
-                  {step}
-                </p>
+                <div key={i} className="text-gray-700">
+                  <LaTeXText content={step} />
+                </div>
               ))}
             </div>
           </div>

@@ -24,3 +24,27 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+/* KaTeX styling improvements */
+.katex-display {
+  margin: 1rem 0;
+  text-align: center;
+}
+
+.katex-inline {
+  display: inline;
+}
+
+/* Ensure KaTeX formulas are properly styled */
+.katex {
+  font-size: 1.1em;
+}
+
+/* Style for LaTeX text content */
+.latex-content {
+  line-height: 1.6;
+}
+
+.latex-content .katex-display {
+  margin: 0.5rem 0;
+}

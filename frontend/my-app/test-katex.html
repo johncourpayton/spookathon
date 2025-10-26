@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KaTeX Test</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+</head>
+<body>
+    <h1>KaTeX Test Page</h1>
+    
+    <h2>Inline Math Test:</h2>
+    <p>This is an inline formula: <span id="inline-math"></span></p>
+    
+    <h2>Display Math Test:</h2>
+    <div id="display-math"></div>
+    
+    <h2>Mixed Content Test:</h2>
+    <div id="mixed-content"></div>
+
+    <script>
+        // Test inline math
+        katex.render("x^2 + y^2 = z^2", document.getElementById("inline-math"), {
+            throwOnError: false
+        });
+        
+        // Test display math
+        katex.render("\\frac{x^2 + 1}{x - 1}", document.getElementById("display-math"), {
+            throwOnError: false,
+            displayMode: true
+        });
+        
+        // Test mixed content
+        const mixedContent = document.getElementById("mixed-content");
+        mixedContent.innerHTML = `
+            <p>Here's a simple equation: $x = 5$</p>
+            <p>And here's a complex one:</p>
+            <p>$$\\int_{-\\infty}^{\\infty} e^{-x^2} dx = \\sqrt{\\pi}$$</p>
+            <p>We can also have inline fractions like $\\frac{1}{2}$ in text.</p>
+        `;
+        
+        // Render all math in the mixed content
+        const mathElements = mixedContent.querySelectorAll('script[type="math/tex"], .math');
+        mathElements.forEach(el => {
+            if (el.textContent.includes('$')) {
+                // This is a simplified approach - in the actual React app, we handle this differently
+                console.log('Found math content:', el.textContent);
+            }
+        });
+    </script>
+</body>
+</html>

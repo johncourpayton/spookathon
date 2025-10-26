@@ -71,7 +71,6 @@ $$[LaTeX for the calculation of Step 3]$$
 
 ---
 ## Final Answer
-The final solution to the problem {latex_formula} is:
 $$\boxed{[Final LaTeX answer]}$$
 """
     

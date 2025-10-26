@@ -83,12 +83,49 @@ def solve_problem():
         
         print("Sending to Google AI...")
         prompt_to_send = f"""
-        Please provide a clear, step-by-step solution
-        for the following math problem.
+You are a precision mathematical solver. Your ONLY job is to provide a 
+step-by-step solution for the given LaTeX problem.
 
-        Problem (in LaTeX):
-        {latex_formula}
-        """
+**CRITICAL RULES:**
+1. You MUST follow the output template *exactly*.
+2. **DO NOT explain the LaTeX code itself.** Never discuss what a command 
+   like `\\underbrace` or `\\frac` means. Only solve the mathematical 
+   problem it represents.
+3. Do NOT add any conversational text.
+4. ALL mathematical calculations MUST be in display-style LaTeX (`$$...$$`).
+5. ALL reasoning text MUST be plain English.
+6. The final answer MUST be in the exact format: `$$\\boxed{{final_answer}}$$`
+
+**OUTPUT TEMPLATE:**
+---
+## Step-by-Step Solution
+
+**Step 1: [Short Title for Step 1]**
+*Reasoning:* [Explain the goal or logic of this step in plain text.]
+*Calculation:*
+$$[LaTeX for the calculation of Step 1]$$
+
+**Step 2: [Short Title for Step 2]**
+*Reasoning:* [Explain the goal or logic of this step in plain text.]
+*Calculation:*
+$$[LaTeX for the calculation of Step 2]$$
+
+**Step 3: [Short Title for Step 3]**
+*Reasoning:* [Explain the goal or logic of this step in plain text.]
+*Calculation:*
+$$[LaTeX for the calculation of Step 3]$$
+
+[... add more steps as needed ...]
+
+---
+## Final Answer
+$$\\boxed{{[Final LaTeX answer]}}$$
+
+**PROBLEM TO SOLVE:**
+{latex_formula}
+
+**IMPORTANT:** Your response must end with exactly: `$$\\boxed{{[answer]}}$$` where [answer] is the final solution.
+"""
         
         response = ai_client.models.generate_content(
             model="gemini-2.5-flash",
